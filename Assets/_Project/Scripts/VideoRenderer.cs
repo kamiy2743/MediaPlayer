@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 namespace MediaPlayer
 {
-    public class VideoRenderer : MonoBehaviour
+    public class VideoRenderer : MonoBehaviour, IPointerClickHandler
     {
         public RawImage RawImage => _rawImage;
         private RawImage _rawImage;
 
         public Video Source => _source;
         private Video _source;
+
+        public UnityEvent<VideoRenderer> OnClick => _onClick;
+        private UnityEvent<VideoRenderer> _onClick = new UnityEvent<VideoRenderer>();
 
         public static VideoRenderer Create(Video video)
         {
@@ -21,10 +26,14 @@ namespace MediaPlayer
 
             var rawImage = rendererObject.AddComponent<RawImage>();
             rawImage.texture = video.Texture;
-            rawImage.raycastTarget = false;
             renderer._rawImage = rawImage;
 
             return renderer;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            _onClick.Invoke(this);
         }
     }
 }
