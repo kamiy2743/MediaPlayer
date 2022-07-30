@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 181791905
+    locked: 0
+  - name: VideoRederer
+    uniqueID: 2085218065
+    locked: 0
+  - name: ControllerUI
+    uniqueID: 3740386745
+    locked: 0
