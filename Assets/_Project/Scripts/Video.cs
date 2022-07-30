@@ -8,8 +8,7 @@ namespace MediaPlayer
 {
     public class Video : MonoBehaviour
     {
-        public VideoPlayer Player => _player;
-        private VideoPlayer _player;
+        private VideoPlayer player;
 
         public RenderTexture Texture => _texture;
         private RenderTexture _texture;
@@ -22,7 +21,7 @@ namespace MediaPlayer
 
         public float OriginalAcpectRatio => _originalSize.x / _originalSize.y;
 
-        public float Volume => _player.GetDirectAudioVolume(0);
+        public float Volume => player.GetDirectAudioVolume(0);
 
         public static async UniTask<Video> CreateFromURLAsync(string url)
         {
@@ -45,15 +44,15 @@ namespace MediaPlayer
             video._texture = new RenderTexture((int)player.width, (int)player.height, 16, RenderTextureFormat.ARGB32);
 
             player.targetTexture = video._texture;
-            video._player = player;
+            video.player = player;
 
             return video;
         }
 
         public void SetVolume(float volume)
         {
-            if (!_player.canSetDirectAudioVolume) return;
-            _player.SetDirectAudioVolume(0, volume);
+            if (!player.canSetDirectAudioVolume) return;
+            player.SetDirectAudioVolume(0, volume);
         }
     }
 }

@@ -10,7 +10,6 @@ namespace MediaPlayer
     {
         [SerializeField] private Slider slider;
 
-        public float value => slider.value;
         public Slider.SliderEvent OnValueChanged => slider.onValueChanged;
 
         public void SetVisible(bool isVisible)

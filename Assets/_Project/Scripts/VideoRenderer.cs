@@ -9,9 +9,6 @@ namespace MediaPlayer
 {
     public class VideoRenderer : MonoBehaviour, IPointerClickHandler
     {
-        public RawImage RawImage => _rawImage;
-        private RawImage _rawImage;
-
         public Video Source => _source;
         private Video _source;
 
@@ -26,7 +23,6 @@ namespace MediaPlayer
 
             var rawImage = rendererObject.AddComponent<RawImage>();
             rawImage.texture = video.Texture;
-            renderer._rawImage = rawImage;
 
             return renderer;
         }
