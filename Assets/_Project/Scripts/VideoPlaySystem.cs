@@ -9,7 +9,7 @@ namespace MediaPlayer
 {
     public class VideoPlaySystem : MonoBehaviour
     {
-        [SerializeField] private Button addVideoButton;
+        [SerializeField] private Button openButton;
 
         private VideoDataStore videoDataStore;
         private VideoRendererDataStore videoRendererDataStore;
@@ -19,10 +19,10 @@ namespace MediaPlayer
             videoDataStore = FindObjectOfType<VideoDataStore>();
             videoRendererDataStore = FindObjectOfType<VideoRendererDataStore>();
 
-            addVideoButton.onClick.AddListener(OnAddVideoButtonClick);
+            openButton.onClick.AddListener(OnOpenButtonClick);
         }
 
-        private void OnAddVideoButtonClick()
+        private void OnOpenButtonClick()
         {
             var paths = StandaloneFileBrowser.OpenFilePanel("動画を選択", "", "", true);
             foreach (var path in paths)
