@@ -21,7 +21,8 @@ namespace MediaPlayer
 
         public float OriginalAcpectRatio => _originalSize.x / _originalSize.y;
 
-        public float Volume => player.GetDirectAudioVolume(0);
+        public float RelativeVolume => _relativeVolume;
+        private float _relativeVolume = 1;
 
         public static async UniTask<Video> CreateFromURLAsync(string url)
         {
@@ -49,10 +50,15 @@ namespace MediaPlayer
             return video;
         }
 
-        public void SetVolume(float volume)
+        public void ApplyVolume(float masterVolume)
         {
             if (!player.canSetDirectAudioVolume) return;
-            player.SetDirectAudioVolume(0, volume);
+            player.SetDirectAudioVolume(0, _relativeVolume * masterVolume);
+        }
+
+        public void SetRelativeVolume(float relativeVolume)
+        {
+            _relativeVolume = relativeVolume;
         }
     }
 }

@@ -1972,6 +1972,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openButton: {fileID: 674058658}
   selectedVideoVolumeSlider: {fileID: 1136550839}
+  masterVolumeSlider: {fileID: 767827556}
 --- !u!1 &1412034744
 GameObject:
   m_ObjectHideFlags: 0

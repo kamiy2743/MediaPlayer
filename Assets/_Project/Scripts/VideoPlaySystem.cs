@@ -11,11 +11,14 @@ namespace MediaPlayer
     {
         [SerializeField] private Button openButton;
         [SerializeField] private VolumeSlider selectedVideoVolumeSlider;
+        [SerializeField] private VolumeSlider masterVolumeSlider;
 
         private VideoDataStore videoDataStore;
         private VideoRendererDataStore videoRendererDataStore;
 
         private VideoRenderer selectedRenderer;
+
+        private float masterVolume = 1;
 
         void Awake()
         {
@@ -24,7 +27,8 @@ namespace MediaPlayer
 
             openButton.onClick.AddListener(OnOpenButtonClick);
             selectedVideoVolumeSlider.SetVisible(false);
-            selectedVideoVolumeSlider.OnValueChanged.AddListener(OnValuedChanged);
+            selectedVideoVolumeSlider.OnValueChanged.AddListener(OnSelectedVideoSliderChanged);
+            masterVolumeSlider.OnValueChanged.AddListener(OnMasterVolumeSliderChanged);
         }
 
         private void OnOpenButtonClick()
@@ -52,12 +56,24 @@ namespace MediaPlayer
         {
             selectedRenderer = renderer;
             selectedVideoVolumeSlider.SetVisible(true);
-            selectedVideoVolumeSlider.SetValue(renderer.Source.Volume);
+            selectedVideoVolumeSlider.SetValue(renderer.Source.RelativeVolume);
         }
 
-        private void OnValuedChanged(float value)
+        private void OnSelectedVideoSliderChanged(float value)
         {
-            selectedRenderer.Source.SetVolume(value);
+            var video = selectedRenderer.Source;
+            video.SetRelativeVolume(value);
+            video.ApplyVolume(masterVolume);
+        }
+
+        private void OnMasterVolumeSliderChanged(float value)
+        {
+            masterVolume = value;
+
+            foreach (var video in videoDataStore.Videos)
+            {
+                video.ApplyVolume(masterVolume);
+            }
         }
     }
 }
