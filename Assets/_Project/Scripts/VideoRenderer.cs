@@ -18,6 +18,9 @@ namespace MediaPlayer
         private RectTransform rectTransform;
         private Vector2 onDragRelativePosition;
 
+        private static readonly Color HIGHLIGHT_COLOR = new Color(1, 0.92f, 0.016f, 0.4f);
+        private GameObject heightlight;
+
         public static VideoRenderer Create(Video video)
         {
             var rendererObject = new GameObject("renderer: " + video.Title);
@@ -27,6 +30,17 @@ namespace MediaPlayer
 
             var rawImage = rendererObject.AddComponent<RawImage>();
             rawImage.texture = video.Texture;
+
+            var highlightRect = new GameObject("highlight").AddComponent<RectTransform>();
+            highlightRect.SetParent(renderer.transform);
+            highlightRect.anchorMin = Vector2.zero;
+            highlightRect.anchorMax = Vector2.one;
+            highlightRect.sizeDelta = Vector2.zero;
+            var image = highlightRect.gameObject.AddComponent<Image>();
+            image.color = HIGHLIGHT_COLOR;
+            image.raycastTarget = false;
+            renderer.heightlight = highlightRect.gameObject;
+            renderer.SetHighlight(false);
 
             return renderer;
         }
@@ -47,6 +61,11 @@ namespace MediaPlayer
         private void OnDrag(PointerEventData e)
         {
             rectTransform.anchoredPosition = e.position + onDragRelativePosition;
+        }
+
+        public void SetHighlight(bool flag)
+        {
+            heightlight.SetActive(flag);
         }
     }
 }

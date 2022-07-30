@@ -54,7 +54,17 @@ namespace MediaPlayer
 
         private void OnVideoRendererClick(VideoRenderer renderer)
         {
+            selectedRenderer?.SetHighlight(false);
+
+            if (selectedRenderer == renderer)
+            {
+                selectedRenderer = null;
+                selectedVideoVolumeSlider.SetVisible(false);
+                return;
+            }
+
             selectedRenderer = renderer;
+            selectedRenderer.SetHighlight(true);
             selectedVideoVolumeSlider.SetVisible(true);
             selectedVideoVolumeSlider.SetValue(renderer.Source.RelativeVolume);
         }
