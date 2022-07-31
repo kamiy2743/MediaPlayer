@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using SFB;
 using Cysharp.Threading.Tasks;
+using UnityEngine.EventSystems;
 
 namespace MediaPlayer
 {
@@ -13,6 +14,7 @@ namespace MediaPlayer
         [SerializeField] private VolumeSlider selectedVideoVolumeSlider;
         [SerializeField] private VolumeSlider masterVolumeSlider;
 
+        private RightClickMenu rightClickMenu;
         private VideoDataStore videoDataStore;
         private VideoRendererDataStore videoRendererDataStore;
 
@@ -22,11 +24,12 @@ namespace MediaPlayer
 
         void Awake()
         {
+            rightClickMenu = FindObjectOfType<RightClickMenu>();
             videoDataStore = FindObjectOfType<VideoDataStore>();
             videoRendererDataStore = FindObjectOfType<VideoRendererDataStore>();
 
+            rightClickMenu.SetVisible(false);
             openButton.onClick.AddListener(OnOpenButtonClick);
-            selectedVideoVolumeSlider.SetVisible(false);
             selectedVideoVolumeSlider.OnValueChanged.AddListener(OnSelectedVideoSliderChanged);
             masterVolumeSlider.OnValueChanged.AddListener(OnMasterVolumeSliderChanged);
         }
@@ -54,18 +57,18 @@ namespace MediaPlayer
 
         private void OnVideoRendererClick(VideoRenderer renderer)
         {
-            selectedRenderer?.SetHighlight(false);
-
-            if (selectedRenderer == renderer)
+            if (!Input.GetMouseButtonUp(1))
             {
+                selectedRenderer?.SetHighlight(false);
                 selectedRenderer = null;
-                selectedVideoVolumeSlider.SetVisible(false);
+                rightClickMenu.SetVisible(false);
                 return;
             }
 
             selectedRenderer = renderer;
             selectedRenderer.SetHighlight(true);
-            selectedVideoVolumeSlider.SetVisible(true);
+            rightClickMenu.SetVisible(true);
+            rightClickMenu.SetToMousePosition();
             selectedVideoVolumeSlider.SetValue(renderer.Source.RelativeVolume);
         }
 

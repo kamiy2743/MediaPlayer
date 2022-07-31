@@ -12,11 +12,6 @@ namespace MediaPlayer
 
         public Slider.SliderEvent OnValueChanged => slider.onValueChanged;
 
-        public void SetVisible(bool isVisible)
-        {
-            gameObject.SetActive(isVisible);
-        }
-
         public void SetValue(float value)
         {
             slider.value = value;
