@@ -49,7 +49,6 @@ namespace MediaPlayer
         {
             var eventTrigger = gameObject.AddComponent<EventTrigger>();
             eventTrigger.AddListener(EventTriggerType.PointerDown, OnPointerDown);
-            eventTrigger.AddListener(EventTriggerType.PointerClick, () => { _onClick.Invoke(this); });
             eventTrigger.AddListener(EventTriggerType.BeginDrag, (e) => OnBeginDrag(e));
             eventTrigger.AddListener(EventTriggerType.Drag, (e) => OnDrag(e));
         }
@@ -57,6 +56,12 @@ namespace MediaPlayer
         private void OnPointerDown()
         {
             transform.SetAsLastSibling();
+            _onClick.Invoke(this);
+        }
+
+        private void OnPointerMove()
+        {
+            Debug.Log("move");
         }
 
         private void OnBeginDrag(PointerEventData e)

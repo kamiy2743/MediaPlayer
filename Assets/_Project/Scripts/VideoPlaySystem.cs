@@ -57,7 +57,7 @@ namespace MediaPlayer
 
         private void OnVideoRendererClick(VideoRenderer renderer)
         {
-            if (!Input.GetMouseButtonUp(1))
+            if (!Input.GetMouseButton(1))
             {
                 selectedRenderer?.SetHighlight(false);
                 selectedRenderer = null;
