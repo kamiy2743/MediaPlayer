@@ -48,9 +48,15 @@ namespace MediaPlayer
         void Awake()
         {
             var eventTrigger = gameObject.AddComponent<EventTrigger>();
+            eventTrigger.AddListener(EventTriggerType.PointerDown, OnPointerDown);
             eventTrigger.AddListener(EventTriggerType.PointerClick, () => { _onClick.Invoke(this); });
             eventTrigger.AddListener(EventTriggerType.BeginDrag, (e) => OnBeginDrag(e));
             eventTrigger.AddListener(EventTriggerType.Drag, (e) => OnDrag(e));
+        }
+
+        private void OnPointerDown()
+        {
+            transform.SetAsLastSibling();
         }
 
         private void OnBeginDrag(PointerEventData e)
