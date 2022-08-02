@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UniRx;
 
 namespace MediaPlayer
 {
@@ -16,10 +17,11 @@ namespace MediaPlayer
         private UnityEvent<VideoRenderer> _onClick = new UnityEvent<VideoRenderer>();
 
         private RectTransform rectTransform;
-        private Vector2 onDragRelativePosition;
 
         private static readonly Color HIGHLIGHT_COLOR = new Color(1, 0.92f, 0.016f, 0.4f);
         private GameObject heightlight;
+
+        private System.IDisposable moveUpdateDisposal;
 
         public static VideoRenderer Create(Video video)
         {
@@ -47,10 +49,10 @@ namespace MediaPlayer
 
         void Awake()
         {
-            var eventTrigger = gameObject.AddComponent<EventTrigger>();
+            var eventTrigger = gameObject.GetOrAddComponent<EventTrigger>();
             eventTrigger.AddListener(EventTriggerType.PointerDown, OnPointerDown);
-            eventTrigger.AddListener(EventTriggerType.BeginDrag, (e) => OnBeginDrag(e));
-            eventTrigger.AddListener(EventTriggerType.Drag, (e) => OnDrag(e));
+            eventTrigger.AddListener(EventTriggerType.PointerUp, OnEndMove);
+            eventTrigger.AddListener(EventTriggerType.BeginDrag, OnBeginDrag);
         }
 
         private void OnPointerDown()
@@ -59,19 +61,32 @@ namespace MediaPlayer
             _onClick.Invoke(this);
         }
 
-        private void OnPointerMove()
+        private void OnBeginDrag()
         {
-            Debug.Log("move");
+            var startRendererPos = rectTransform.anchoredPosition;
+            var startPointerPos = Input.mousePosition;
+            moveUpdateDisposal = Observable.EveryUpdate()
+                .Subscribe(_ =>
+                {
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        OnEndMove();
+                        return;
+                    }
+
+                    OnMove(startRendererPos, startPointerPos);
+                });
         }
 
-        private void OnBeginDrag(PointerEventData e)
+        private void OnMove(Vector2 startRendererPos, Vector2 startPointerPos)
         {
-            onDragRelativePosition = rectTransform.anchoredPosition - e.position;
+            var delta = (Vector2)Input.mousePosition - startPointerPos;
+            rectTransform.anchoredPosition = startRendererPos + delta;
         }
 
-        private void OnDrag(PointerEventData e)
+        private void OnEndMove()
         {
-            rectTransform.anchoredPosition = e.position + onDragRelativePosition;
+            moveUpdateDisposal.Dispose();
         }
 
         public void SetHighlight(bool flag)
