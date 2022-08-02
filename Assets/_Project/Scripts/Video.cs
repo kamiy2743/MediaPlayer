@@ -19,7 +19,7 @@ namespace MediaPlayer
         public Vector2Int OriginalSize => _originalSize;
         private Vector2Int _originalSize;
 
-        public float OriginalAcpectRatio => _originalSize.x / _originalSize.y;
+        public float OriginalAcpectRatio => (float)_originalSize.x / (float)_originalSize.y;
 
         public float RelativeVolume => _relativeVolume;
         private float _relativeVolume = 1;

@@ -21,6 +21,8 @@ namespace MediaPlayer
         private static readonly Color HIGHLIGHT_COLOR = new Color(1, 0.92f, 0.016f, 0.4f);
         private GameObject heightlight;
 
+        private ResizableUI resizableUI;
+
         private System.IDisposable moveUpdateDisposal;
 
         public static VideoRenderer Create(Video video)
@@ -44,6 +46,12 @@ namespace MediaPlayer
             renderer.heightlight = highlightRect.gameObject;
             renderer.SetHighlight(false);
 
+            var fitter = rendererObject.AddComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
+            fitter.aspectRatio = video.OriginalAcpectRatio;
+
+            renderer.resizableUI = rendererObject.AddComponent<ResizableUI>();
+
             return renderer;
         }
 
@@ -63,6 +71,8 @@ namespace MediaPlayer
 
         private void OnBeginDrag()
         {
+            if (resizableUI.InResizableEdge()) return;
+
             var startRendererPos = rectTransform.anchoredPosition;
             var startPointerPos = Input.mousePosition;
             moveUpdateDisposal = Observable.EveryUpdate()
