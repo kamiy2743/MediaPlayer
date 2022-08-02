@@ -19,7 +19,7 @@ namespace MediaPlayer
         private RectTransform rectTransform;
 
         private static readonly Color HIGHLIGHT_COLOR = new Color(1, 0.92f, 0.016f, 0.4f);
-        private GameObject heightlight;
+        private GameObject heighlight;
 
         private ResizableUI resizableUI;
 
@@ -43,7 +43,7 @@ namespace MediaPlayer
             var image = highlightRect.gameObject.AddComponent<Image>();
             image.color = HIGHLIGHT_COLOR;
             image.raycastTarget = false;
-            renderer.heightlight = highlightRect.gameObject;
+            renderer.heighlight = highlightRect.gameObject;
             renderer.SetHighlight(false);
 
             var fitter = rendererObject.AddComponent<AspectRatioFitter>();
@@ -101,7 +101,7 @@ namespace MediaPlayer
 
         public void SetHighlight(bool flag)
         {
-            heightlight.SetActive(flag);
+            heighlight.SetActive(flag);
         }
     }
 }

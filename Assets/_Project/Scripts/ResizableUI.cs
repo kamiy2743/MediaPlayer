@@ -9,16 +9,15 @@ namespace MediaPlayer
 {
     public class ResizableUI : MonoBehaviour
     {
-        private RectTransform rectTransform;
+        private RectTransform rectTransform => transform as RectTransform;
         private Camera mainCamera;
         private const int RESIZABLE_EDGE_WIDTH = 50;
 
-        private System.IDisposable mouseOverUpdate;
-        private System.IDisposable resizeUpdate;
+        private System.IDisposable mouseOverUpdateDisposal;
+        private System.IDisposable resizeUpdateDisposal;
 
         void Awake()
         {
-            rectTransform = gameObject.GetOrAddComponent<RectTransform>();
             mainCamera = Camera.main;
 
             var eventTrigger = gameObject.GetOrAddComponent<EventTrigger>();
@@ -29,7 +28,7 @@ namespace MediaPlayer
 
         private void OnPointerEnter()
         {
-            mouseOverUpdate = Observable.EveryUpdate()
+            mouseOverUpdateDisposal = Observable.EveryUpdate()
                 .Subscribe(_ => OnMouseOver());
         }
 
@@ -40,7 +39,7 @@ namespace MediaPlayer
 
         private void OnPointerExit()
         {
-            mouseOverUpdate.Dispose();
+            mouseOverUpdateDisposal.Dispose();
         }
 
         private void OnBeginDrag()
@@ -55,7 +54,7 @@ namespace MediaPlayer
 
             var startSize = rectTransform.sizeDelta;
             var startPointerPos = Input.mousePosition;
-            resizeUpdate = Observable.EveryUpdate()
+            resizeUpdateDisposal = Observable.EveryUpdate()
                 .Subscribe(_ =>
                 {
                     if (Input.GetMouseButtonUp(0))
@@ -78,7 +77,7 @@ namespace MediaPlayer
 
         private void OnEndResize()
         {
-            resizeUpdate.Dispose();
+            resizeUpdateDisposal.Dispose();
             rectTransform.SetPivot(Vector2.one * 0.5f);
         }
 
