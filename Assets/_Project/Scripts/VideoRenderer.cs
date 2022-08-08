@@ -59,7 +59,6 @@ namespace MediaPlayer
         {
             var eventTrigger = gameObject.GetOrAddComponent<EventTrigger>();
             eventTrigger.AddListener(EventTriggerType.PointerDown, OnPointerDown);
-            eventTrigger.AddListener(EventTriggerType.PointerUp, OnEndMove);
             eventTrigger.AddListener(EventTriggerType.BeginDrag, OnBeginDrag);
         }
 

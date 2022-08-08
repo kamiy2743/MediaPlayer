@@ -2237,6 +2237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortButton: {fileID: 1600694416}
+  renderersParent: {fileID: 733559971}
 --- !u!1 &1600694414
 GameObject:
   m_ObjectHideFlags: 0
