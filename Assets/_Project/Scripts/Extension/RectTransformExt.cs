@@ -22,5 +22,10 @@ namespace MediaPlayer
         {
             return new Vector2(rt.sizeDelta.x * (pivot.x - 0.5f), rt.sizeDelta.y * (pivot.y - 0.5f));
         }
+        
+        public static bool IsUnderPointer(this RectTransform rt)
+        {
+            return rt.rect.Contains((Vector2)Input.mousePosition + new Vector2(rt.rect.left, rt.rect.top));
+        }
     }
 }
